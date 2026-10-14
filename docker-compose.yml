@@ -1,0 +1,47 @@
+services:
+  web:
+    build: .
+    container_name: medivault-web
+    ports:
+      - "8080:80"
+    environment:
+      DB_HOST: db
+      DB_NAME: medivault
+      DB_USER: medivault_user
+      DB_PASS: ${DB_PASS}
+      SMTP_HOST: mailpit
+      SMTP_PORT: 1025
+    depends_on:
+      - db
+      - mailpit
+
+  db:
+    image: mysql:8.0
+    container_name: medivault-db
+    environment:
+      MYSQL_DATABASE: medivault
+      MYSQL_USER: medivault_user
+      MYSQL_PASSWORD: ${DB_PASS}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database.sql:/docker-entrypoint-initdb.d/database.sql
+
+  phpmyadmin:
+    image: phpmyadmin:5
+    container_name: medivault-phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+    depends_on:
+      - db
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: medivault-mail
+    ports:
+      - "8025:8025"
+
+volumes:
+  db_data:
