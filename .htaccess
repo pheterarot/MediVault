@@ -1,0 +1,153 @@
+# ==============================================================
+# MEDIVAULT — .htaccess
+# Location: /medivault/.htaccess (project root)
+# Purpose:  Server-level security hardening
+#           Directory listing off
+#           Block direct access to sensitive folders
+#           Block direct access to .sql files
+#           Custom 404 error document
+#           Security headers via mod_headers
+# Rules:    Never expose directory contents
+#           Never allow direct include/src file access
+#           Never let .sql files be downloaded
+#           All headers mirror auth.php server-side headers
+# ==============================================================
+
+
+# ==============================================================
+# OPTION 1 — DISABLE DIRECTORY LISTING
+# Prevents Apache from showing a file browser if no index file
+# exists in a folder — critical for /assets/ and any other folder
+# ==============================================================
+Options -Indexes
+
+
+# ==============================================================
+# OPTION 2 — FOLLOW SYMLINKS (required for mod_rewrite)
+# ==============================================================
+Options +FollowSymLinks
+
+
+# ==============================================================
+# MOD_REWRITE — URL rules and folder access blocking
+# ==============================================================
+<IfModule mod_rewrite.c>
+
+    RewriteEngine On
+
+    # ------------------------------------------------------------
+    # BLOCK DIRECT ACCESS TO /includes/ FOLDER
+    # These files (db.php, auth.php, mailer.php) must never be
+    # accessed directly via browser URL — they are server-side only
+    # Returns 403 Forbidden immediately
+    # ------------------------------------------------------------
+    RewriteRule ^includes(/.*)?$ - [F,L]
+
+    # ------------------------------------------------------------
+    # BLOCK DIRECT ACCESS TO /src/ FOLDER
+    # PHPMailer library files live here — no reason for browser access
+    # Returns 403 Forbidden immediately
+    # ------------------------------------------------------------
+    RewriteRule ^src(/.*)?$ - [F,L]
+
+</IfModule>
+
+
+# ==============================================================
+# BLOCK DIRECT ACCESS TO .SQL FILES
+# database.sql and any backup .sql files must never be
+# downloadable via browser — contains full schema and seed data
+# Uses FilesMatch — works even without mod_rewrite
+# ==============================================================
+<FilesMatch "\.sql$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+
+# ==============================================================
+# BLOCK OTHER SENSITIVE FILE EXTENSIONS
+# These file types should never be served directly to a browser
+# .log files, .env files, composer files, htaccess backups
+# ==============================================================
+<FilesMatch "\.(log|env|sh|bak|swp|git)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+
+# ==============================================================
+# CUSTOM ERROR DOCUMENT
+# Points all 404 errors to MediVault branded 404.php
+# Path is relative to document root — adjust if MediVault
+# is installed in a subfolder (e.g. /medivault/404.php)
+# ==============================================================
+ErrorDocument 404 /medivault/404.php
+
+
+# ==============================================================
+# SECURITY HEADERS — via mod_headers
+# These mirror the headers already set in auth.php for PHP pages
+# Setting them here catches static files and edge cases too
+# mod_headers must be enabled on the server (standard on XAMPP)
+# On InfinityFree: mod_headers may be restricted —
+# auth.php PHP headers will handle protected pages regardless
+# ==============================================================
+<IfModule mod_headers.c>
+
+    # Prevent page from being loaded in an iframe (clickjacking)
+    Header always set X-Frame-Options "DENY"
+
+    # Prevent browser from MIME-sniffing the content type
+    Header always set X-Content-Type-Options "nosniff"
+
+    # Enable browser's built-in XSS filter
+    Header always set X-XSS-Protection "1; mode=block"
+
+    # Control how much referrer info is sent with requests
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+
+    # Remove Apache server version from response headers
+    # Prevents fingerprinting the server software and version
+    Header always unset X-Powered-By
+    Header always unset Server
+
+</IfModule>
+
+
+# ==============================================================
+# SERVER SIGNATURE — hide Apache version in error pages
+# ServerSignature Off equivalent via .htaccess
+# Prevents "Apache/2.4.xx" from showing in error pages
+# ==============================================================
+ServerSignature Off
+
+
+# ==============================================================
+# PHP SETTINGS — override php.ini where allowed
+# These harden PHP at the server level for this folder only
+# Note: InfinityFree may restrict some php_flag directives
+# ==============================================================
+<IfModule mod_php.c>
+
+    # Never display PHP errors to end users in production
+    php_flag display_errors Off
+
+    # Still log errors server-side (check error_log)
+    php_flag log_errors On
+
+    # Prevent PHP version from leaking in response headers
+    php_flag expose_php Off
+
+</IfModule>
+
+
+# ==============================================================
+# DENY ACCESS TO THIS FILE ITSELF
+# .htaccess should never be readable via browser
+# This rule protects the file from direct URL access
+# ==============================================================
+<Files ".htaccess">
+    Order Allow,Deny
+    Deny from all
+</Files>
