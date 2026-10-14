@@ -55,7 +55,7 @@ PHP 8.2 (Apache), MySQL 8.0, HTML, CSS, JavaScript, Bootstrap 5, Chart.js, PHPMa
 ## Quick start
 
 ```
-git clone https://github.com/USERNAME/medivault.git
+git clone https://github.com/pheterarot/MediVault.git
 cd medivault
 copy .env.example .env
 ```
@@ -190,4 +190,4 @@ medivault/
 
 ## Team
 
-Add the group members' names here.
+lory jane buned, mike gino martinez, justin agad, al jasser maliga.
