@@ -1,0 +1,22 @@
+# Secrets - never commit
+.env
+includes/config.production.php
+
+# Real or old database dumps (real data must never be committed)
+database_old*.sql
+medivault*.sql
+backup*.sql
+*.dump.sql
+
+# Debug script and private notes
+debug3.php
+MediVault-MasterSpecs.txt
+
+# Logs
+*.log
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

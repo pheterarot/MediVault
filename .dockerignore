@@ -1,0 +1,9 @@
+.git
+.gitignore
+.dockerignore
+.env
+*.sql
+*.md
+*.log
+debug3.php
+MediVault-MasterSpecs.txt
