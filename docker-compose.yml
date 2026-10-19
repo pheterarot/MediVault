@@ -41,7 +41,9 @@ services:
     image: axllent/mailpit
     container_name: medivault-mail
     ports:
-      - "8025:8025"
+      - "127.0.0.1:8025:8025"
+    environment:
+      MP_UI_AUTH: "admin:${MAILPIT_PASS}"
 
 volumes:
   db_data:
