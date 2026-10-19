@@ -62,7 +62,7 @@ copy .env.example .env
 
 On macOS or Linux use `cp .env.example .env` instead of `copy`.
 
-Open `.env` in a text editor and set `DB_PASS` and `DB_ROOT_PASS` to passwords of your choice. The `.env` file is private and is never committed to GitHub. Then start the system:
+Open `.env` in a text editor and set DB_PASS, DB_ROOT_PASS and MAILPIT_PASS to passwords of your choice. The `.env` file is private and is never committed to GitHub. Then start the system:
 
 ```
 docker compose up -d --build
@@ -94,7 +94,7 @@ Every demo account uses the password **`Admin@1234`**.
 **How to log in:**
 
 1. Open http://localhost:8080 and enter an email and password.
-2. The OTP is not sent to a real inbox. Open Mailpit at http://localhost:8025 and copy the 6-digit code from the newest email.
+2. The OTP is not sent to a real inbox. Open Mailpit at http://localhost:8025 and copy the 6-digit code from the newest email. Mailpit asks for a login: username admin and the MAILPIT_PASS from your .env
 3. Enter the code to reach the dashboard.
 
 Change these passwords before any real deployment.
