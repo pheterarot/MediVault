@@ -1,0 +1,12 @@
+docker compose down -v
+docker compose up -d --build
+docker compose ps
+docker compose logs db --tail 3
+
+
+
+cd C:\xampp\htdocs\MediVault
+set PATH=%PATH%;C:\Program Files\Git\cmd
+git --version
+git checkout develop
+git pull
