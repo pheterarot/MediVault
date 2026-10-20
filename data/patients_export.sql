@@ -29,7 +29,7 @@ CREATE TABLE `patients` (
   KEY `updated_by` (`updated_by`),
   CONSTRAINT `patients_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`),
   CONSTRAINT `patients_ibfk_2` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 LOCK TABLES `patients` WRITE;
@@ -39,6 +39,7 @@ INSERT INTO `patients` VALUES (2,'Maria Reyes',32,'Female','Migraine',2,NULL,'20
 INSERT INTO `patients` VALUES (3,'Alex Tan',27,'Other','Seasonal allergies',3,NULL,'2026-10-20 06:19:31','2026-10-20 06:24:53','2026-10-20 06:24:53',1);
 INSERT INTO `patients` VALUES (4,'Pheter John Arot',34,'Male','High Blood',1,NULL,'2026-10-20 06:24:44','2026-10-20 06:24:44',NULL,NULL);
 INSERT INTO `patients` VALUES (5,'resandy bangcot',20,'Male','inquire',1,NULL,'2026-10-20 06:41:30','2026-10-20 06:41:30',NULL,NULL);
+INSERT INTO `patients` VALUES (6,'matrtinez',23,'Male','tb',1,NULL,'2026-10-20 06:50:35','2026-10-20 06:50:35',NULL,NULL);
 /*!40000 ALTER TABLE `patients` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
